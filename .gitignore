@@ -1,0 +1,10 @@
+# Ignore List
+
+# Directory
+*Debug*
+.vs
+
+# File
+
+# Vim Backup files
+.*~
