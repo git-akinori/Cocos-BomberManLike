@@ -1,5 +1,6 @@
-#include "TitleScene.h"
 #include "AudioEngine.h"
+#include "TitleScene.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -29,19 +30,20 @@ bool Title::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-	// update() を 有効化
-	this->scheduleUpdate();
-	aaa = Sprite::create("bomber.png");
-	if (aaa == nullptr)
-	{
-		problemLoading("'bomber.png'");
-	}
-	else
-	{
-		// position the sprite on the center of the screen
-		aaa->setPosition(origin + visibleSize / 2);
-		this->addChild(aaa, 2);
-	}
+	//// update() を 有効化
+	//this->scheduleUpdate();
+	//// aaa に スプライト を入れる
+	//aaa = Sprite::create("bomber.png");
+	//if (aaa == nullptr)
+	//{
+	//	problemLoading("'bomber.png'");
+	//}
+	//else
+	//{
+	//	// position the sprite on the center of the screen
+	//	aaa->setPosition(origin + visibleSize / 2);
+	//	this->addChild(aaa, 2);
+	//}
 
 
 
@@ -52,7 +54,7 @@ bool Title::init()
 	auto closeItem = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
-		CC_CALLBACK_1(Title::menuCloseCallback, this));
+		CC_CALLBACK_1(Title::gameStartCallback, this));
 
 	if (closeItem == nullptr ||
 		closeItem->getContentSize().width <= 0 ||
@@ -73,8 +75,6 @@ bool Title::init()
 	this->addChild(menu, 1);
 
 	/////////////////////////////
-	// 3. add your codes below...
-
 	// add a label shows "Title"
 	// create and initialize a label
 
@@ -111,9 +111,9 @@ bool Title::init()
 }
 
 
-void Title::update(float delta) {
-	aaa->setPosition(Vec2(aaa->getPosition().x + 0.1, aaa->getPosition().y));
-}
+//void Title::update(float delta) {
+//	aaa->setPosition(Vec2(aaa->getPosition().x + 0.1, aaa->getPosition().y));
+//}
 
 
 void Title::menuCloseCallback(Ref* pSender)
@@ -129,6 +129,9 @@ void Title::menuCloseCallback(Ref* pSender)
 
 	//EventCustom customEndEvent("game_scene_close_event");
 	//_eventDispatcher->dispatchEvent(&customEndEvent);
+}
 
 
+void Title::gameStartCallback(Ref* pSender) {
+	Director::getInstance()->replaceScene(TransitionFade::create(2, Game::createScene()));
 }

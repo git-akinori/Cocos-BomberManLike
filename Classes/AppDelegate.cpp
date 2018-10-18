@@ -49,6 +49,11 @@ static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
+	//// スプライトシートをキャッシュ
+	//auto spritecache = SpriteFrameCache::getInstance();
+
+	//spritecache->addSpriteFramesWithFile("floor128x32.plist");
+	//spritecache->addSpriteFramesWithFile("objects64x32.plist");
 }
 
 AppDelegate::~AppDelegate() 
