@@ -19,94 +19,53 @@ static void problemLoading(const char* filename)
 // インスタンスの初期化処理メソッド
 bool Title::init()
 {
-	//////////////////////////////
-	// 先に親クラスの初期化処理を行う
 	if (!Scene::init())
 	{
 		return false;
 	}
 
+	// 画面サイズ、原点、画面中央の座標
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-
-	//// update() を 有効化
-	//this->scheduleUpdate();
-	//// aaa に スプライト を入れる
-	//aaa = Sprite::create("bomber.png");
-	//if (aaa == nullptr)
-	//{
-	//	problemLoading("'bomber.png'");
-	//}
-	//else
-	//{
-	//	// position the sprite on the center of the screen
-	//	aaa->setPosition(origin + visibleSize / 2);
-	//	this->addChild(aaa, 2);
-	//}
-
+	auto centerPos = origin + visibleSize / 2;
 
 
 	/////////////////////////////
-	// イメージを使ったメニューアイテムを追加（クリックでプログラム終了）
-
+	// イメージを使ったメニューアイテムを追加（クリックでゲームシーンへ遷移）
 	// 処理を抜けるためのクローズアイコンを追加 自動的に開放されるオブジェクト
 	auto closeItem = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
 		CC_CALLBACK_1(Title::gameStartCallback, this));
-
-	if (closeItem == nullptr ||
-		closeItem->getContentSize().width <= 0 ||
-		closeItem->getContentSize().height <= 0)
-	{
-		problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-	}
-	else
-	{
 		float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
 		float y = origin.y + closeItem->getContentSize().height / 2;
 		closeItem->setPosition(Vec2(x, y));
-	}
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Vec2::ZERO);
+
 	this->addChild(menu, 1);
 
+
 	/////////////////////////////
-	// add a label shows "Title"
-	// create and initialize a label
-
+	// タイトルラベル追加
 	auto label = Label::createWithTTF("Title", "fonts/Marker Felt.ttf", 24);
-	if (label == nullptr)
-	{
-		problemLoading("'fonts/Marker Felt.ttf'");
-	}
-	else
-	{
-		// position the label on the center of the screen
-		label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - label->getContentSize().height));
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - label->getContentSize().height));
 
-		// add the label as a child to this layer
-		this->addChild(label, 1);
-	}
+	this->addChild(label, 1);
 
-	// add "HelloWorld" splash screen"
-	auto sprite = Sprite::create("slash_fire.png");
-	if (sprite == nullptr)
-	{
-		problemLoading("'slash_fire.png'");
-	}
-	else
-	{
-		// position the sprite on the center of the screen
-		sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
-		// add the sprite as a child to this layer
-		this->addChild(sprite, 0);
-	}
+	// 背景追加
+	auto sprite_bg = Sprite::create("bg/bg2.jpg");
+	sprite_bg->setScale(3.2);
+	sprite_bg->setPosition(centerPos);
+
+	this->addChild(sprite_bg, 0);
+
+
+
 	return true;
 }
 
