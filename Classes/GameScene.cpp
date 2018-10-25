@@ -67,12 +67,6 @@ bool Game::init() {
 	// update() 有効化
 	this->scheduleUpdate();
 
-	// キー入力
-	auto listener = EventListenerKeyboard::create();
-	listener->onKeyPressed = CC_CALLBACK_2(Game::onKeyPressed, this);
-	listener->onKeyReleased = CC_CALLBACK_2(Game::onKeyReleased, this);
-	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-
 	// 背景追加
 	// サイズ変更、座標指定
 	auto sprite_bg = Sprite::create("bg/bg1.jpg");
@@ -92,36 +86,54 @@ bool Game::init() {
 
 	// プレイヤー追加
 	// サイズ変更、座標指定
-	auto player1 = Sprite::create("charamap288x256.png", Rect(25, 129, 24, 32));
-	//player1->setScale(1.2);
-	//player1->setAnchorPoint(Vec2(0, 0));
-	player1->setPosition(map->getContentSize() / 2);
-	map->addChild(player1, 2);
+	auto sprite = Sprite::create("charamap288x256.png", Rect(25, 129, 24, 32));
+	player1 = std::make_shared<Player>(Player(sprite, Vec2(0, 0), 1));
+	map->addChild(sprite, 1);
+
+	// キー入力
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(Game::onKeyPressed, this);
+	listener->onKeyReleased = CC_CALLBACK_2(Game::onKeyReleased, this);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
 }
 
 void Game::update(float delta){
-	
+	player1->update();
 }
 
 void Game::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
 
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW) {
-
+		player1->setStatus(Player::eStatus::UP);
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW) {
-
+		player1->setStatus(Player::eStatus::DOWN);
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
-
+		player1->setStatus(Player::eStatus::LEFT);
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
-
+		player1->setStatus(Player::eStatus::RIGHT);
 	}
 	log("Key with keycode %d pressed", keyCode);
 }
 
 void Game::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
-	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW) {
-
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW
+		|| player1->getStatus() != Player::eStatus::UP) {
+		player1->setStatus(Player::eStatus::NONE);
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW
+		|| player1->getStatus() != Player::eStatus::DOWN) {
+		player1->setStatus(Player::eStatus::NONE);
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW
+		|| player1->getStatus() != Player::eStatus::LEFT) {
+		player1->setStatus(Player::eStatus::NONE);
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW
+		|| player1->getStatus() != Player::eStatus::RIGHT) {
+		player1->setStatus(Player::eStatus::NONE);
 	}
 }
